@@ -10,14 +10,14 @@ on:
 # 실제 어떤 작업을 실행할지에 대한 명시
 jobs:
   build_dockerpush:
-   	# 스크립트 실행 환경 (OS)
+# 스크립트 실행 환경 (OS)
     runs-on: ubuntu-latest
     env :
       APPLICATION: ${{ secrets.APPLICATION }}
 
-    # 실제 실행 스크립트
+# 실제 실행 스크립트
     steps:
-     # uses는 github actions에서 제공하는 플러그인을 실행.(git checkout 실행)
+# uses는 github actions에서 제공하는 플러그인을 실행.(git checkout 실행)
     - name: Checkout
       uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -38,11 +38,11 @@ jobs:
 
     - name: Build with Gradle
       run: mvn -B package --file pom.xml
-    # Gradle 권한 부여
+# Gradle 권한 부여
     - name: Grant permission for gradlew
       run: chmod +x ./gradlew
 
-        # 테스트 및 빌드
+# 테스트 및 빌드
     - name: Build with Gradle
       run: ./gradlew clean build
 
