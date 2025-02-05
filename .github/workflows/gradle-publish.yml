@@ -60,14 +60,14 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name:latest
           cache-to: type=inline
 
-#
+##
   pull_deploy:
     name: Connect server ssh and pull from container registry
     needs: build_dockerpush
     runs-on: ubuntu-latest
     steps:
       - name: connect ssh
-        uses: appleboy/ssh-action@main
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOYMENT_HOST }}
           username: ${{ secrets.DEPLOYMENT_USERNAME }}
