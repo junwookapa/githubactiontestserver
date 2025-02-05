@@ -35,8 +35,7 @@ jobs:
       run: |
        touch ./src/main/resources/application.properties
        echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.properties
-ㅁㅁ
-#작동해라얍
+
 # Gradle 권한 부여
     - name: Grant permission for gradlew
       run: chmod +x ./gradlew
