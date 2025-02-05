@@ -12,6 +12,6 @@ public class Test2Contlloer {
 
     @GetMapping("/test")
     public String cartListByUserId(){
-        return "test";
+        return "test";//
     }
 }
