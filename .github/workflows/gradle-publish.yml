@@ -72,7 +72,6 @@ jobs:
           username: ${{ secrets.DEPLOYMENT_USERNAME }}
           password: ${{ secrets.DEPLOYMENT_PASSWORD }}
           port: ${{ secrets.DEPLOYMENT_PORT }}
-          connect_timeout: 120s
           script: |
             sudo docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
             sudo docker stop $(sudo docker ps -a -q)
