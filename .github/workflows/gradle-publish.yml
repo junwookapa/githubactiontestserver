@@ -53,8 +53,8 @@ jobs:
       - name: docker build and push
         run: |
           sudo docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
-          sudo docker build --no-cache -t ${{ secrets.NCP_CONTAINER_REGISTRY }}//tag-name:latest .
-          sudo docker push ${{ secrets.NCP_CONTAINER_REGISTRY }}//tag-name:latest
+          sudo docker build --no-cache -t ${{ secrets.NCP_CONTAINER_REGISTRY }}:test .
+          sudo docker push ${{ secrets.NCP_CONTAINER_REGISTRY }}:test
 
   pull_deploy:
     name: Connect server ssh and pull from container registry
@@ -72,8 +72,8 @@ jobs:
             sudo docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm -f $(sudo docker ps -a -q)
-            sudo docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
-            sudo docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
+            sudo docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}:test
+            sudo docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}:test
             sudo docker image prune -f
             sudo docker images
 
