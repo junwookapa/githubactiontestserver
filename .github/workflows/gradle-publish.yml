@@ -44,11 +44,21 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      - name: docker build and push
-        run: |
-          sudo docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
-          sudo docker build -t ${{ secrets.NCP_CONTAINER_REGISTRY }}/test/latest
-          sudo docker push ${{ secrets.NCP_CONTAINER_REGISTRY }}/test/latest
+      - name: Login to NCP Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.NCP_CONTAINER_REGISTRY }}
+          username: ${{ secrets.NCP_ACCESS_KEY }}
+          password: ${{ secrets.NCP_SECRET_KEY }}
+      - name: build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name:latest
+          cache-from: type=registry,ref=${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name:latest
+          cache-to: type=inline
 
   pull_deploy:
     name: Connect server ssh and pull from container registry
@@ -66,8 +76,8 @@ jobs:
             sudo docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm -f $(sudo docker ps -a -q)
-            sudo docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}:test
-            sudo docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}:test
+            sudo docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
+            sudo docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
             sudo docker image prune -f
             sudo docker images
 
