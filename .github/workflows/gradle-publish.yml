@@ -77,6 +77,7 @@ jobs:
             docker login -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }} ${{ secrets.NCP_CONTAINER_REGISTRY }}
             docker pull ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
             docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
-            docker run -d -p 8080:80 ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
+            docker rm -f $(docker ps -a -q)
+            docker run -d -p 8080:8080 ${{ secrets.NCP_CONTAINER_REGISTRY }}/tag-name
             docker image prune -f
+            ps -ef | grep
